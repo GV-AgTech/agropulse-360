@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroPulse 360 — Suite Agronómica Argentina</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        agro: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-agro-700 to-agro-500 p-2.5 rounded-2xl text-white shadow-lg shadow-agro-600/20">
+                    <i data-lucide="sprout" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-agro-700 to-emerald-500 bg-clip-text text-transparent">AgroPulse 360</h1>
+                        <span class="text-[10px] font-bold uppercase tracking-wider bg-agro-100 dark:bg-agro-950 text-agro-700 dark:text-agro-300 px-2.5 py-0.5 rounded-full border border-agro-200 dark:border-agro-800">Argentina</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Plataforma Tecnológica Agropecuaria</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <!-- CEO / Creator Formal Badge -->
+                <div class="hidden lg:flex items-center space-x-2 text-xs bg-agro-50 dark:bg-agro-950/80 text-agro-800 dark:text-agro-300 px-3.5 py-2 rounded-xl border border-agro-200 dark:border-agro-800 shadow-inner font-medium">
+                    <i data-lucide="award" class="w-4 h-4 text-agro-600"></i>
+                    <span>Fundador, Creador y CEO: <strong>Gonzalo Vanzini</strong></span>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-300 shadow-sm" aria-label="Cambiar modo de visualización">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs Bar -->
+    <nav class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 sticky top-20 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
+            <div class="flex space-x-2 sm:space-x-4 py-3 min-w-max">
+                <button onclick="switchTab('calculators')" id="btn-tab-calculators" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all bg-agro-600 text-white shadow-md shadow-agro-600/25">
+                    <i data-lucide="calculator" class="w-4 h-4"></i>
+                    <span>Herramientas y Calculadoras</span>
+                </button>
+                <button onclick="switchTab('fields')" id="btn-tab-fields" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    <span>Gestión de Lotes por Provincia</span>
+                </button>
+                <button onclick="switchTab('notes')" id="btn-tab-notes" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+                    <span>Bitácora y Monitoreo</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
+
+        <!-- TAB 1: CALCULATORS -->
+        <section id="tab-calculators" class="tab-content space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-agro-900 via-agro-800 to-emerald-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl">
+                <div class="space-y-2">
+                    <span class="bg-agro-700/80 text-agro-100 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Tecnología Agronómica</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Motores de Cálculo de Precisión</h2>
+                    <p class="text-agro-100 text-sm max-w-2xl">Optimice insumos y evalúe potencial de rinde adaptado a las condiciones productivas de la región pampeana y extrapampeana.</p>
+                </div>
+                <div class="flex items-center space-x-3 bg-agro-950/50 p-4 rounded-2xl border border-agro-700/40">
+                    <i data-lucide="cpu" class="w-8 h-8 text-emerald-400"></i>
+                    <div>
+                        <span class="text-[10px] uppercase text-agro-300 block font-semibold">Motor Agrícola</span>
+                        <span class="text-xs font-bold text-white">Versión 4.2 - INTA / CREA</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculators Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- 1. Sowing Density Calculator -->
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="p-3 bg-agro-100 dark:bg-agro-950 text-agro-600 rounded-2xl">
+                                <i data-lucide="layers" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Densidad de Siembra (semillas/m² a kg/ha)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Calcula la cantidad exacta de kilos de semilla por hectárea.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Plantas Objetivo / m²</label>
+                                    <input type="number" id="s-target" value="70" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Poder Germinativo (%)</label>
+                                    <input type="number" id="s-germ" value="95" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Logro de Implantación (%)</label>
+                                    <input type="number" id="s-est" value="90" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Peso de 1.000 Granos (g)</label>
+                                    <input type="number" id="s-peso" value="160" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <button onclick="calculateSowing()" class="w-full mt-2 bg-agro-600 hover:bg-agro-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md shadow-agro-600/20 text-sm">Calcular Siembra</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4">
+                        <div class="bg-agro-50/60 dark:bg-slate-950 p-4 rounded-2xl border border-agro-100 dark:border-slate-800">
+                            <span class="text-xs text-slate-500 block">Semilla Necesaria</span>
+                            <span id="res-sowing-kg" class="text-2xl font-extrabold text-agro-600">--</span> <span class="text-xs text-slate-500">kg/ha</span>
+                        </div>
+                        <div class="bg-agro-50/60 dark:bg-slate-950 p-4 rounded-2xl border border-agro-100 dark:border-slate-800">
+                            <span class="text-xs text-slate-500 block">Semillas a Colocar</span>
+                            <span id="res-sowing-m2" class="text-2xl font-extrabold text-agro-600">--</span> <span class="text-xs text-slate-500">sem/m²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Fertilization Calculator -->
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="p-3 bg-agro-100 dark:bg-agro-950 text-agro-600 rounded-2xl">
+                                <i data-lucide="flask-conical" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Calculadora de Fertilización (N y P)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Dosis de Urea (46% N) y MAP (Fosfato Monoamónico).</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Nitrógeno (N) Objetivo (kg/ha)</label>
+                                    <input type="number" id="f-n-target" value="130" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Fósforo (P) Suelo (ppm)</label>
+                                    <input type="number" id="f-p-soil" value="14" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Fósforo (P) Objetivo (ppm)</label>
+                                    <input type="number" id="f-p-target" value="30" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Eficiencia de Aplicación (%)</label>
+                                    <input type="number" id="f-eff" value="75" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <button onclick="calculateFertilizer()" class="w-full mt-2 bg-agro-600 hover:bg-agro-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md shadow-agro-600/20 text-sm">Calcular Fertilizantes</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4">
+                        <div class="bg-agro-50/60 dark:bg-slate-950 p-4 rounded-2xl border border-agro-100 dark:border-slate-800">
+                            <span class="text-xs text-slate-500 block">Urea (46% N)</span>
+                            <span id="res-urea" class="text-2xl font-extrabold text-agro-600">--</span> <span class="text-xs text-slate-500">kg/ha</span>
+                        </div>
+                        <div class="bg-agro-50/60 dark:bg-slate-950 p-4 rounded-2xl border border-agro-100 dark:border-slate-800">
+                            <span class="text-xs text-slate-500 block">MAP (Fosfato)</span>
+                            <span id="res-map" class="text-2xl font-extrabold text-agro-600">--</span> <span class="text-xs text-slate-500">kg/ha</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Yield Estimator -->
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="p-3 bg-agro-100 dark:bg-agro-950 text-agro-600 rounded-2xl">
+                                <i data-lucide="trending-up" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Estimador de Rinde (qq/ha y tn/ha)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Proyección en quintales y toneladas por hectárea.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Cultivo</label>
+                                    <select id="y-crop" onchange="updateYieldParams()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                        <option value="soja">Soja</option>
+                                        <option value="maiz">Maíz</option>
+                                        <option value="trigo">Trigo</option>
+                                        <option value="girasol">Girasol</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Plantas / Metro Lineal</label>
+                                    <input type="number" id="y-plants" value="14" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Entre Surcos (m)</label>
+                                    <input type="number" step="0.05" id="y-spacing" value="0.52" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label id="y-label-grains" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Granos/Planta</label>
+                                    <input type="number" id="y-grains" value="45" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Peso 1k Granos (g)</label>
+                                    <input type="number" id="y-peso" value="160" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <button onclick="calculateYield()" class="w-full mt-2 bg-agro-600 hover:bg-agro-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md shadow-agro-600/20 text-sm">Calcular Rendimiento</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4">
+                        <div class="bg-agro-50/60 dark:bg-slate-950 p-4 rounded-2xl border border-agro-100 dark:border-slate-800">
+                            <span class="text-xs text-slate-500 block">Rendimiento en Quintales</span>
+                            <span id="res-yield-qq" class="text-2xl font-extrabold text-agro-600">--</span> <span class="text-xs text-slate-500">qq/ha</span>
+                        </div>
+                        <div class="bg-agro-50/60 dark:bg-slate-950 p-4 rounded-2xl border border-agro-100 dark:border-slate-800">
+                            <span class="text-xs text-slate-500 block">Rendimiento en Toneladas</span>
+                            <span id="res-yield-ton" class="text-2xl font-extrabold text-agro-600">--</span> <span class="text-xs text-slate-500">tn/ha</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Machinery & Operational Costs (Pesos Argentinos) -->
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="p-3 bg-agro-100 dark:bg-agro-950 text-agro-600 rounded-2xl">
+                                <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Costos Operativos (Pesos Argentinos $/ha)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Gasoil, amortización de maquinaria y labores.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Consumo Gasoil (Litros/ha)</label>
+                                    <input type="number" id="c-fuel" value="18" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Precio Gasoil ($ARS / Litro)</label>
+                                    <input type="number" id="c-fuelfee" value="1150" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Desgaste / Amortización ($ARS/ha)</label>
+                                    <input type="number" id="c-wear" value="4500" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Mano de Obra y Logística ($ARS/ha)</label>
+                                    <input type="number" id="c-labor" value="3800" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <button onclick="calculateCosts()" class="w-full mt-2 bg-agro-600 hover:bg-agro-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md shadow-agro-600/20 text-sm">Calcular Costos</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4">
+                        <div class="bg-agro-50/60 dark:bg-slate-950 p-4 rounded-2xl border border-agro-100 dark:border-slate-800">
+                            <span class="text-xs text-slate-500 block">Costo Operativo Total</span>
+                            <span id="res-cost-total" class="text-2xl font-extrabold text-agro-600">--</span> <span class="text-xs text-slate-500">$ARS/ha</span>
+                        </div>
+                        <div class="bg-agro-50/60 dark:bg-slate-950 p-4 rounded-2xl border border-agro-100 dark:border-slate-800">
+                            <span class="text-xs text-slate-500 block">Gasto de Combustible</span>
+                            <span id="res-cost-fuel" class="text-2xl font-extrabold text-agro-600">--</span> <span class="text-xs text-slate-500">$ARS/ha</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 2: FIELD MANAGER (Provincias de Argentina) -->
+        <section id="tab-fields" class="tab-content hidden space-y-6">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="text-2xl font-extrabold">Gestor de Lotes por Provincia</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Administre superficie, ubicación geográfica y estado fenológico de sus campos en Argentina.</p>
+                    </div>
+                    <button onclick="openFieldModal()" class="bg-agro-600 hover:bg-agro-700 text-white font-semibold px-5 py-3 rounded-2xl transition-all shadow-md shadow-agro-600/25 flex items-center justify-center space-x-2 text-sm">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        <span>Registrar Nuevo Lote</span>
+                    </button>
+                </div>
+
+                <!-- Metrics Overview -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center space-x-4">
+                        <div class="p-3 bg-agro-100 dark:bg-agro-900/50 text-agro-600 rounded-xl">
+                            <i data-lucide="map-pin" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">Total de Lotes Registrados</span>
+                            <span id="metric-lotes" class="text-2xl font-extrabold">0</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center space-x-4">
+                        <div class="p-3 bg-agro-100 dark:bg-agro-900/50 text-agro-600 rounded-xl">
+                            <i data-lucide="maximize" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">Superficie Total Administrada</span>
+                            <span id="metric-ha" class="text-2xl font-extrabold text-agro-600">0 ha</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center space-x-4">
+                        <div class="p-3 bg-agro-100 dark:bg-agro-900/50 text-agro-600 rounded-xl">
+                            <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">Provincias Activas</span>
+                            <span id="metric-provinces" class="text-2xl font-extrabold">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fields Grid -->
+                <div id="fields-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: NOTES & LOGBOOK -->
+        <section id="tab-notes" class="tab-content hidden space-y-6">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="text-2xl font-extrabold">Bitácora y Monitoreo Fitosanitario</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Registro de eventos climáticos, plagas, malezas y avisos de aplicación.</p>
+                    </div>
+                    <button onclick="openNoteModal()" class="bg-agro-600 hover:bg-agro-700 text-white font-semibold px-5 py-3 rounded-2xl transition-all shadow-md shadow-agro-600/25 flex items-center justify-center space-x-2 text-sm">
+                        <i data-lucide="file-plus" class="w-5 h-5"></i>
+                        <span>Nueva Nota</span>
+                    </button>
+                </div>
+
+                <!-- Notes List -->
+                <div id="notes-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal: New Field -->
+    <div id="modal-field" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-xl">Registrar Nuevo Lote</h3>
+                <button onclick="closeFieldModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <form id="form-field" onsubmit="saveField(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Nombre del Lote / Establecimiento</label>
+                    <input type="text" id="mf-name" required placeholder="Ej: Lote 4 - La Vanguardia" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Provincia</label>
+                        <select id="mf-prov" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                            <option value="Santa Fe">Santa Fe</option>
+                            <option value="Córdoba">Córdoba</option>
+                            <option value="Buenos Aires">Buenos Aires</option>
+                            <option value="Entre Ríos">Entre Ríos</option>
+                            <option value="La Pampa">La Pampa</option>
+                            <option value="Santiago del Estero">Santiago del Estero</option>
+                            <option value="Tucumán">Tucumán</option>
+                            <option value="Chaco">Chaco</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Superficie (ha)</label>
+                        <input type="number" id="mf-ha" required step="0.5" placeholder="120" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Cultivo Local</label>
+                        <select id="mf-crop" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                            <option value="Soja">Soja</option>
+                            <option value="Maíz">Maíz</option>
+                            <option value="Trigo">Trigo</option>
+                            <option value="Girasol">Girasol</option>
+                            <option value="Cebada">Cebada</option>
+                            <option value="Sorgo">Sorgo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Estado Fenológico</label>
+                        <input type="text" id="mf-pheno" required placeholder="Ej: V6 / R1" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeFieldModal()" class="px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-agro-600 text-white hover:bg-agro-700 shadow-md shadow-agro-600/20">Guardar Lote</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: New Note -->
+    <div id="modal-note" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-xl">Nueva Nota de Bitácora</h3>
+                <button onclick="closeNoteModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <form id="form-note" onsubmit="saveNote(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Título del Evento / Observación</label>
+                    <input type="text" id="mn-title" required placeholder="Ej: Monitoreo de Isoca medidora en Lote Norte" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Categoría</label>
+                        <select id="mn-cat" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                            <option value="Plagas y Enfermedades">Plagas y Enfermedades</option>
+                            <option value="Clima y Lluvias">Clima y Lluvias</option>
+                            <option value="Aplicación Fitosanitaria">Aplicación Fitosanitaria</option>
+                            <option value="General">General / Agronómico</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Fecha</label>
+                        <input type="date" id="mn-date" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Observaciones Técnicas</label>
+                    <textarea id="mn-desc" rows="3" required placeholder="Describa los hallazgos a campo..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-agro-500 focus:outline-none"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeNoteModal()" class="px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-agro-600 text-white hover:bg-agro-700 shadow-md shadow-agro-600/20">Guardar Nota</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-4">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-agro-600"></i>
+                <span>AgroPulse 360 — Todos los derechos reservados. Sector Agropecuario Argentino.</span>
+            </div>
+            <div class="font-bold text-agro-800 dark:text-agro-300 bg-agro-50 dark:bg-agro-950 px-4 py-2 rounded-xl border border-agro-200 dark:border-agro-800 shadow-sm">
+                Fundador, Creador y CEO: Gonzalo Vanzini
+            </div>
+        </div>
+    </footer>
+
+    <!-- App Logic Script -->
+    <script>
+        // Init Lucide icons
+        lucide.createIcons();
+
+        // Theme Toggle (Persistent & Elegant)
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        });
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-agro-600', 'text-white', 'shadow-md', 'shadow-agro-600/25');
+                el.classList.add('text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            });
+
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-tab-' + tabId);
+            activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            activeBtn.classList.add('bg-agro-600', 'text-white', 'shadow-md', 'shadow-agro-600/25');
+        }
+
+        // 1. Calculators Logic
+        function calculateSowing() {
+            const target = parseFloat(document.getElementById('s-target').value) || 0;
+            const germ = parseFloat(document.getElementById('s-germ').value) || 100;
+            const est = parseFloat(document.getElementById('s-est').value) || 100;
+            const peso = parseFloat(document.getElementById('s-peso').value) || 0;
+
+            const effective = (germ / 100) * (est / 100);
+            const semM2 = effective > 0 ? target / effective : 0;
+            const kgHa = semM2 * 10000 * (peso / 1000000);
+
+            document.getElementById('res-sowing-kg').innerText = kgHa.toFixed(1);
+            document.getElementById('res-sowing-m2').innerText = semM2.toFixed(1);
+        }
+
+        function calculateFertilizer() {
+            const nTarget = parseFloat(document.getElementById('f-n-target').value) || 0;
+            const pSoil = parseFloat(document.getElementById('f-p-soil').value) || 0;
+            const pTarget = parseFloat(document.getElementById('f-p-target').value) || 0;
+            const eff = parseFloat(document.getElementById('f-eff').value) || 75;
+
+            const urea = (nTarget / (eff / 100)) / 0.46;
+            const pDiff = Math.max(0, pTarget - pSoil);
+            const mapKg = pDiff * 4.2;
+
+            document.getElementById('res-urea').innerText = Math.round(urea);
+            document.getElementById('res-map').innerText = Math.round(mapKg);
+        }
+
+        function updateYieldParams() {
+            const crop = document.getElementById('y-crop').value;
+            const label = document.getElementById('y-label-grains');
+            if (crop === 'soja') {
+                label.innerText = "Granos/Planta";
+                document.getElementById('y-grains').value = 45;
+                document.getElementById('y-peso').value = 160;
+                document.getElementById('y-plants').value = 14;
+            } else if (crop === 'maiz') {
+                label.innerText = "Granos/Espiga";
+                document.getElementById('y-grains').value = 480;
+                document.getElementById('y-peso').value = 280;
+                document.getElementById('y-plants').value = 7.5;
+            } else if (crop === 'trigo') {
+                label.innerText = "Granos/Espiga";
+                document.getElementById('y-grains').value = 28;
+                document.getElementById('y-peso').value = 40;
+                document.getElementById('y-plants').value = 240;
+            } else if (crop === 'girasol') {
+                label.innerText = "Granos/Capitulo";
+                document.getElementById('y-grains').value = 800;
+                document.getElementById('y-peso').value = 50;
+                document.getElementById('y-plants').value = 5.5;
+            }
+            calculateYield();
+        }
+
+        function calculateYield() {
+            const crop = document.getElementById('y-crop').value;
+            const plants = parseFloat(document.getElementById('y-plants').value) || 0;
+            const spacing = parseFloat(document.getElementById('y-spacing').value) || 0.52;
+            const grains = parseFloat(document.getElementById('y-grains').value) || 0;
+            const peso = parseFloat(document.getElementById('y-peso').value) || 0;
+
+            let plantsHa = (crop === 'trigo') ? plants : (plants / spacing) * 10000;
+            let totalGrains = plantsHa * grains;
+            let yieldKg = totalGrains * (peso / 1000) / 1000;
+            let yieldQq = yieldKg / 100;
+            let yieldTon = yieldKg / 1000;
+
+            document.getElementById('res-yield-qq').innerText = yieldQq.toFixed(1);
+            document.getElementById('res-yield-ton').innerText = yieldTon.toFixed(2);
+        }
+
+        function calculateCosts() {
+            const fuel = parseFloat(document.getElementById('c-fuel').value) || 0;
+            const fuelFee = parseFloat(document.getElementById('c-fuelfee').value) || 0;
+            const wear = parseFloat(document.getElementById('c-wear').value) || 0;
+            const labor = parseFloat(document.getElementById('c-labor').value) || 0;
+
+            const fuelCost = fuel * fuelFee;
+            const total = fuelCost + wear + labor;
+
+            document.getElementById('res-cost-total').innerText = total.toLocaleString('es-AR', {maximumFractionDigits: 0});
+            document.getElementById('res-cost-fuel').innerText = fuelCost.toLocaleString('es-AR', {maximumFractionDigits: 0});
+        }
+
+        // 2. Field Manager Logic (Provincias de Argentina)
+        let fields = [
+            { id: 1, name: 'Lote Las Rosas', prov: 'Santa Fe', ha: 185.0, crop: 'Soja', pheno: 'R3 - Formación de vainas' },
+            { id: 2, name: 'Estancia La Blanqueada', prov: 'Córdoba', ha: 310.0, crop: 'Maíz', pheno: 'V8 - Vegetativo avanzado' },
+            { id: 3, name: 'Lote El Descanso', prov: 'Buenos Aires', ha: 140.0, crop: 'Trigo', pheno: 'Z30 - Encañazón' }
+        ];
+
+        function renderFields() {
+            const grid = document.getElementById('fields-grid');
+            grid.innerHTML = '';
+
+            let totalHa = 0;
+            let provSet = new Set();
+
+            fields.forEach(f => {
+                totalHa += f.ha;
+                provSet.add(f.prov);
+
+                const card = document.createElement('div');
+                card.className = 'bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex flex-col justify-between space-y-4 shadow-sm hover:border-agro-500 transition-all';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold px-3 py-1 bg-agro-100 dark:bg-agro-900/50 text-agro-700 dark:text-agro-300 rounded-xl">${f.crop}</span>
+                            <button onclick="deleteField(${f.id})" class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <h3 class="font-extrabold text-base text-slate-800 dark:text-slate-100">${f.name}</h3>
+                        <div class="mt-4 space-y-2 text-xs text-slate-600 dark:text-slate-400">
+                            <div class="flex justify-between"><span>Provincia:</span> <strong class="text-slate-900 dark:text-white"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1 text-agro-600"></i>${f.prov}</strong></div>
+                            <div class="flex justify-between"><span>Superficie:</span> <strong class="text-slate-900 dark:text-white">${f.ha} ha</strong></div>
+                            <div class="flex justify-between"><span>Fenología:</span> <strong class="text-slate-900 dark:text-white">${f.pheno}</strong></div>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center text-xs font-semibold">
+                        <span class="text-slate-400">ID: #${f.id}</span>
+                        <span class="text-agro-600 flex items-center space-x-1.5">
+                            <span class="w-2 h-2 rounded-full bg-agro-500 animate-pulse"></span>
+                            <span>Monitoreo Activo</span>
+                        </span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('metric-lotes').innerText = fields.length;
+            document.getElementById('metric-ha').innerText = totalHa.toFixed(1) + ' ha';
+            document.getElementById('metric-provinces').innerText = provSet.size;
+
+            lucide.createIcons();
+        }
+
+        function openFieldModal() {
+            document.getElementById('modal-field').classList.remove('hidden');
+        }
+        function closeFieldModal() {
+            document.getElementById('modal-field').classList.add('hidden');
+            document.getElementById('form-field').reset();
+        }
+        function saveField(e) {
+            e.preventDefault();
+            const name = document.getElementById('mf-name').value;
+            const prov = document.getElementById('mf-prov').value;
+            const ha = parseFloat(document.getElementById('mf-ha').value);
+            const crop = document.getElementById('mf-crop').value;
+            const pheno = document.getElementById('mf-pheno').value;
+
+            fields.push({ id: Date.now(), name, prov, ha, crop, pheno });
+            closeFieldModal();
+            renderFields();
+        }
+        function deleteField(id) {
+            fields = fields.filter(f => f.id !== id);
+            renderFields();
+        }
+
+        // 3. Notes & Logbook Logic
+        let notes = [
+            { id: 1, title: 'Presencia inicial de Isoca medidora', cat: 'Plagas y Enfermedades', date: '2026-06-04', desc: 'Se detectaron 3 isocas por metro lineal en Lote Las Rosas. Evaluar umbral de daño económico.' },
+            { id: 2, title: 'Acumulación de precipitaciones zonales', cat: 'Clima y Lluvias', date: '2026-06-02', desc: 'Registro de 48 mm acumulados en la semana. Excelente recarga de perfil hídrico.' }
+        ];
+
+        function renderNotes() {
+            const grid = document.getElementById('notes-grid');
+            grid.innerHTML = '';
+
+            notes.forEach(n => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex flex-col justify-between space-y-4 shadow-sm';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold px-3 py-1 bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 rounded-xl">${n.cat}</span>
+                            <span class="text-xs text-slate-400 font-semibold">${n.date}</span>
+                        </div>
+                        <h3 class="font-extrabold text-base text-slate-800 dark:text-slate-100">${n.title}</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">${n.desc}</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+                        <button onclick="deleteNote(${n.id})" class="text-xs text-red-500 hover:text-red-600 font-semibold flex items-center space-x-1">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            <span>Eliminar Nota</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function openNoteModal() {
+            document.getElementById('modal-note').classList.remove('hidden');
+            document.getElementById('mn-date').valueAsDate = new Date();
+        }
+        function closeNoteModal() {
+            document.getElementById('modal-note').classList.add('hidden');
+            document.getElementById('form-note').reset();
+        }
+        function saveNote(e) {
+            e.preventDefault();
+            const title = document.getElementById('mn-title').value;
+            const cat = document.getElementById('mn-cat').value;
+            const date = document.getElementById('mn-date').value;
+            const desc = document.getElementById('mn-desc').value;
+
+            notes.unshift({ id: Date.now(), title, cat, date, desc });
+            closeNoteModal();
+            renderNotes();
+        }
+        function deleteNote(id) {
+            notes = notes.filter(n => n.id !== id);
+            renderNotes();
+        }
+
+        // Initialize calculations & lists on load
+        window.onload = function() {
+            calculateSowing();
+            calculateFertilizer();
+            calculateYield();
+            calculateCosts();
+            renderFields();
+            renderNotes();
+        };
+    </script>
+</body>
+</html>
